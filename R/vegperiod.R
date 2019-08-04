@@ -90,7 +90,7 @@
 #'   \url{http://etccdi.pacificclimate.org/list_27_indices.shtml}
 #'
 #'   Frich, P., Alexander, L., Della-Marta, P., Gleason, B., Haylock, M.,
-#'   Klein Tank, A., & Peterson, T. (2002)
+#'   Klein Tank, A. and Peterson, T. (2002)
 #'   Observed coherent changes in climatic extremes during the second half of
 #'   the twentieth century.
 #'   \emph{Climate Research}, \bold{19}, 193--212.
@@ -160,8 +160,8 @@ vegperiod <- function(dates, Tavg, start.method, end.method, Tsum.out=FALSE,
     possible.species <- c("Larix decidua", "Picea abies (frueh)",
                           "Picea abies (spaet)", "Picea abies (noerdl.)",
                           "Picea omorika", "Pinus sylvestris",
-                          "Betula pubescens", "Quercus robur", "Quercus petraea",
-                          "Fagus sylvatica")
+                          "Betula pubescens", "Quercus robur",
+                          "Quercus petraea", "Fagus sylvatica")
     if(is.null(species))
       stop(paste0("If start.method='Menzel', species must be one of '",
                   paste(possible.species, collapse="', '"), "'."))
@@ -195,7 +195,7 @@ vegperiod <- function(dates, Tavg, start.method, end.method, Tsum.out=FALSE,
 
   # determine leap years
   years <- unique(df$year)
-  leap <- ifelse((years%%4==0 & years%%100!=0) | years%%400==0, TRUE, FALSE)
+  leap <- (years %% 4 == 0 & years %% 100 != 0) | years %% 400 == 0
 
   # est.prev in valid range?
   # set to a high value if not Menzel
@@ -256,9 +256,11 @@ vegperiod <- function(dates, Tavg, start.method, end.method, Tsum.out=FALSE,
   # if indicated calculate day degrees in vegperiod also
   res <- data.frame(year=years, start=start, end=end)
 
+  seq_len
+
   if(Tsum.out){
     res$Tsum <- numeric(nrow(res))
-    for(i in 1:nrow(res)){
+    for(i in seq_along(res$Tsum)){
       res$Tsum[i] <- sum(df$Tavg[df$year == years[i] &
                                    df$DOY >= start[i] &
                                    df$DOY <= end[i]])

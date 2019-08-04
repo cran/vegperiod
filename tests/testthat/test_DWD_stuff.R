@@ -79,7 +79,7 @@ test_that("download of list of stations works", {
   expect_is(stations$id,   'integer')
   expect_is(stations$from, 'Date')
   expect_is(stations$to,   'Date')
-  expect_is(stations$elev, 'numeric')
+  expect_is(stations$elev, 'integer')
   expect_is(stations$lat,  'numeric')
   expect_is(stations$long, 'numeric')
 
@@ -93,7 +93,7 @@ test_that("download of list of stations works", {
   expect_is(precip$id,   'integer')
   expect_is(precip$from, 'Date')
   expect_is(precip$to,   'Date')
-  expect_is(precip$elev, 'numeric')
+  expect_is(precip$elev, 'integer')
   expect_is(precip$lat,  'numeric')
   expect_is(precip$long, 'numeric')
 })
@@ -118,6 +118,24 @@ test_that("download of data works", {
   expect_is(clim$RSK,         'numeric')
   expect_is(clim$RSKF,        'integer')
   expect_is(clim$TMK,         'numeric')
+
+
+  # download monthly climate data from 1270
+  expect_silent(clim <- read.DWDdata(id = 1270, type="climate", period="recent",
+                                     resolution="monthly", quiet=TRUE))
+  expect_true(file.exists(file.path(tempdir(), "monatswerte_KL_01270_akt.zip")))
+
+  expect_is(clim, 'data.frame')
+  expect_length(clim, 16)
+  expect_equal(nrow(clim), 19)
+
+  expect_is(clim$STATIONS_ID, 'integer')
+  expect_equal(unique(clim$STATIONS_ID), 1270L)
+  expect_is(clim$MESS_DATUM_BEGINN, 'Date')
+  expect_is(clim$MESS_DATUM_ENDE, 'Date')
+  expect_is(clim$QN_4,        'integer')
+  expect_is(clim$MO_TN,         'numeric')
+  expect_is(clim$MO_RR,         'numeric')
 
 
   # download historical data from the Brocken if curl available ---------------

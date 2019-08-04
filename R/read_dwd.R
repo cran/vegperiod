@@ -30,8 +30,8 @@
 #' }
 #' A more detailed description of the rules can be found in the official and
 #' legally binding German
-#' \href{ftp://ftp-cdc.dwd.de/pub/CDC/Nutzungsbedingungen_German.pdf}{Nutzungsbedingungen}
-#' or the translated \href{ftp://ftp-cdc.dwd.de/pub/CDC/Terms_of_use.pdf}{Terms
+#' \href{https://opendata.dwd.de/climate_environment/CDC/Nutzungsbedingungen_German.pdf}{Nutzungsbedingungen}
+#' or the translated \href{https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf}{Terms
 #' of use}.
 #'
 #' @param type string. Stations can be of type \samp{"climate"} offering a range
@@ -79,7 +79,7 @@ read.DWDstations <- function(type='climate', period='recent',
   resolution <- match.arg(resolution, choices=c('daily', 'monthly'))
 
   # construct url
-  baseURL <- "ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate"
+  baseURL <- "ftp://opendata.dwd.de/climate_environment/CDC/observations_germany/climate"
 
   url.type <- switch(type,'climate'='kl','precipitation'='more_precip')
   pre.type <- switch(type, 'climate'='KL','precipitation'='RR')
@@ -114,9 +114,9 @@ read.DWDstations <- function(type='climate', period='recent',
 #'
 #' An introduction to the data available at the Climate Data Center can be
 #' found in the German
-#' \href{ftp://ftp-cdc.dwd.de/pub/CDC/Liesmich_intro_CDC-FTP.pdf}{Liesmich_intro_CDC_ftp}
+#' \href{https://opendata.dwd.de/climate_environment/CDC/Liesmich_intro_CDC-FTP.pdf}{Liesmich_intro_CDC_ftp}
 #' or the translated
-#' \href{ftp://ftp-cdc.dwd.de/pub/CDC/Readme_intro_CDC_ftp.pdf}{Readme_intro_CDC_ftp}.
+#' \href{https://opendata.dwd.de/climate_environment/CDC/Readme_intro_CDC_ftp.pdf}{Readme_intro_CDC_ftp}.
 #'
 #' The freely accessible part of the Climate Data Center of Germany's National
 #' Meteorological Service (Deutscher Wetterdienst, DWD) is part of the DWD's
@@ -135,8 +135,8 @@ read.DWDstations <- function(type='climate', period='recent',
 #' }
 #' A more detailed description of the rules can be found in the official and
 #' legally binding German
-#' \href{ftp://ftp-cdc.dwd.de/pub/CDC/Nutzungsbedingungen_German.pdf}{Nutzungsbedingungen}
-#' or the translated \href{ftp://ftp-cdc.dwd.de/pub/CDC/Terms_of_use.pdf}{Terms
+#' \href{https://opendata.dwd.de/climate_environment/CDC/Nutzungsbedingungen_German.pdf}{Nutzungsbedingungen}
+#' or the translated \href{https://opendata.dwd.de/climate_environment/CDC/Terms_of_use.pdf}{Terms
 #' of use}.
 #'
 #' @param id integer. A valid station id (cf. \link{read.DWDstations}).
@@ -244,14 +244,14 @@ read.DWDdata <- function(id, type='climate', period='recent',
       resolution <- match.arg(resolution, choices=c('daily', 'monthly'))
 
       # build up URL  & filename
-      baseURL <- "ftp://ftp-cdc.dwd.de/pub/CDC/observations_germany/climate"
+      baseURL <- "ftp://opendata.dwd.de/climate_environment/CDC/observations_germany/climate"
       url.type <- switch(type,'climate'='kl','precipitation'='more_precip')
       myURL <- file.path(baseURL, resolution, url.type, period)
 
       if(period == "historical"){
         # historical filenames can't be guessed -> list all files & filter
         if(!quiet)
-          message('Searching for correct file name in list of available files...')
+          message('Searching for file name in list of available files...')
         files <- .list_available_via_FTP(paste0(myURL, '/'))
         fname <- grep(formatC(id, width=5, flag='0'), files, value=TRUE)
         if(length(fname) == 0)
@@ -259,20 +259,12 @@ read.DWDdata <- function(id, type='climate', period='recent',
                       sQuote(myURL), '.'))
       } else {
         # recent
-        fname <- paste0(formatC(id, width=5, flag='0'), "_akt.zip")
-
-        if(type == 'climate' && resolution == 'monthly'){
-          fname <- paste(
-            switch(resolution, 'daily'='tageswerte', 'monthly'='monatswerte'),
-            fname, sep='_'
-          )
-        } else {
-          fname <- paste(
-            switch(resolution, 'daily'='tageswerte', 'monthly'='monatswerte'),
-            switch(type,'climate'='KL','precipitation'='RR'),
-            fname, sep='_'
-          )
-        }
+        fname <- paste(
+          switch(resolution, 'daily'='tageswerte', 'monthly'='monatswerte'),
+          switch(type,'climate'='KL','precipitation'='RR'),
+          formatC(id, width=5, flag='0'), "akt.zip",
+          sep='_'
+        )
       }
       url <- file.path(myURL, fname)
       pathToZip <- .download_from_ftp(url, destdir, fname, quiet)
@@ -297,8 +289,10 @@ read.DWDdata <- function(id, type='climate', period='recent',
 
   df <- .read.obscureDWDfiles(file)
 
-  if('MESS_DATUM' %in% names(df))
-    df$MESS_DATUM <- as.Date(as.character(df$MESS_DATUM), format="%Y%m%d")
+  md_col <- grep("^MESS_DATUM", names(df))
+  for(i in md_col){
+    df[, i] <- as.Date(as.character(df[, i]), format="%Y%m%d")
+  }
 
   return(df)
 }
@@ -362,8 +356,9 @@ read.DWDdata <- function(id, type='climate', period='recent',
 #------------------------------------------------------------------------------
 .read.obscureDWDfiles <- function(file){
   # treat EOF as comment
-  df <- utils::read.table(file, sep=";", dec=".", header=TRUE, comment.char="\032",
-                   strip.white=TRUE, na.strings='-999')
+  df <- utils::read.table(file, sep=";", dec=".", header=TRUE,
+                          comment.char="\032", strip.white=TRUE,
+                          na.strings='-999')
   df$eor <- NULL
   return(df)
 }
@@ -407,11 +402,4 @@ read.DWDdata <- function(id, type='climate', period='recent',
   close(con)
 
   return(filenames)
-}
-
-
-# Hack to provide dir.exists in R < 3.2
-#------------------------------------------------------------------------------
-if(!existsFunction('dir.exists')){
-  dir.exists <- function(x){ file.exists(x) & file.info(x)$isdir }
 }
