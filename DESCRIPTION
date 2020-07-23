@@ -1,11 +1,11 @@
 Package: vegperiod
 Title: Determine Thermal Vegetation Periods
-Version: 0.2.6
+Version: 0.2.7
 Authors@R: 
   person(given="Robert", 
          family="Nuske", 
          role=c("aut", "cre"),
-         email="robert.nuske@mailbox.org",
+         email="robert.nuske@nw-fva.de",
          comment=c(ORCID="0000-0001-9773-2061"))
 Description: Collection of common methods to determine growing season length in
   a simple manner. Start and end dates of the vegetation periods are calculated
@@ -18,9 +18,9 @@ NeedsCompilation: no
 Depends: R (>= 3.2.0)
 Imports: utils
 Suggests: curl, testthat (>= 1.0.2)
-RoxygenNote: 6.1.1
-Packaged: 2019-08-04 14:11:26 UTC; rnuske
+RoxygenNote: 7.1.1
+Packaged: 2020-07-23 06:56:19 UTC; rnuske
 Author: Robert Nuske [aut, cre] (<https://orcid.org/0000-0001-9773-2061>)
-Maintainer: Robert Nuske <robert.nuske@mailbox.org>
+Maintainer: Robert Nuske <robert.nuske@nw-fva.de>
 Repository: CRAN
-Date/Publication: 2019-08-04 14:40:03 UTC
+Date/Publication: 2020-07-23 08:00:03 UTC

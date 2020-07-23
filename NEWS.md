@@ -1,5 +1,12 @@
 # News for Package vegperiod
 
+
+## Version 0.2.7
+  * changed temperature plausibility checks because of severe winter 1956 with
+  daily mean temperatures of -27 °C in Germany and even lower and higher 
+  daily mean temperatures in climate scenarios.
+
+
 ## Version 0.2.6
   * fixed change of base URL of DWD open data (Thanks @ckluss for reporting and pointing in the right direction)
   * fixed download of recent monthly climate data. Breakage caused by DWD file name schema change (#1). Thanks @rwoerde for reporting.
