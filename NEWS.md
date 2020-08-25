@@ -1,10 +1,12 @@
 # News for Package vegperiod
 
+## Version 0.3
+  * fix `est.prev` parameter used in start method Menzel. Now averages as advertised (Thanks for catching this bug to @awellpott).
+  * switched to unit testing framework `tinytest`
+
 
 ## Version 0.2.7
-  * changed temperature plausibility checks because of severe winter 1956 with
-  daily mean temperatures of -27 °C in Germany and even lower and higher 
-  daily mean temperatures in climate scenarios.
+  * changed temperature plausibility checks because of severe winter 1956 with daily mean temperatures of -27 °C in Germany and even lower and higher daily mean temperatures in climate scenarios.
 
 
 ## Version 0.2.6
