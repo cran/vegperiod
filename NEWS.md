@@ -1,5 +1,13 @@
 # News for Package vegperiod
 
+## Version 0.4.0
+  * introduced threshold `Tsum.crit` for sum of day degrees in function `vegperiod()`
+  * made plausibility check optional via new parameter `check.data` (suggested by @rhabel)
+  * restructured documentation to provide more details on start and end methods 
+  * acknowledged funder in DESCRIPTION
+  * fixed a changed URL
+
+
 ## Version 0.3.1
   * if `StdMeteo` does not find an end, it now reports the last day of the year instead of 0.
 

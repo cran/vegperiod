@@ -35,7 +35,7 @@ expect_error(
   vegperiod(dates=rb30$date, Tavg=rb30$tm, start.method="Menzel",
             end.method="vonWilpert", species="Picea abies (spaet)",
             est.prev=3, Tsum.out=FALSE),
-  "Daily mean temperatures are too small/large")
+  "Your input temperature data exceeds the plausible range")
 
 expect_equal(
   vegperiod(dates=rb30$date, Tavg=rb30$tm/10, start.method="Menzel",
@@ -58,7 +58,7 @@ expect_error(
   vegperiod(dates=rb10$date, Tavg=rb10$tm, start.method="Menzel",
             end.method="vonWilpert", species="Picea abies (spaet)",
             est.prev=3, Tsum.out=FALSE),
-  "Daily mean temperatures are too small/large")
+  "Your input temperature data exceeds the plausible range")
 
 expect_equal(
   vegperiod(dates=rb10$date, Tavg=rb10$tm/10, start.method="Menzel",
@@ -85,6 +85,6 @@ expect_equal(
     year  = 2005:2007,
     start = c(9L, 89L, 8L),
     end   = c(324L, 365L, 319L),
-    Tsum  = c(3437.1, 3913.5, 3829.3)
+    Tsum  = c(3505.5, 3915.6, 3844.2)
     )
 )
